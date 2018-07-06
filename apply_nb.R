@@ -26,13 +26,61 @@ aggregate(state.x77,
 
 ## example with character variables and NAs
 testDF <- data.frame(v1 = c(1,3,5,7,8,3,5,NA,4,5,7,9),
-                     v2 = c(11,33,55,77,88,33,55,NA,44,55,77,99) )
+                     v2 = c(11,33,55,77,88,33,55,NA,44,55,77,99))
 
 by1 <- c("red", "blue", 1, 2, NA, "big", 1, 2, "red", 1, NA, 12)
 by2 <- c("wet", "dry", 99, 95, NA, "damp", 95, 99, "red", 99, NA, NA)
 
-aggregate(x = testDF, by = list(by1, by2), FUN = "mean")
+fby1 <- factor(by1, exclude = "") #  treat NAs as a group
+fby2 <- factor(by2, exclude = "")
 
+aggregate(x = testDF, by = list(fby1, fby2), FUN = "mean")
+
+# > chickwts
+# weight      feed
+# 1     179 horsebean
+# 2     160 horsebean
+# 3     136 horsebean
+# ...
+# 11    309   linseed
+# 12    229   linseed
+# 13    181   linseed
+
+aggregate(weight ~ feed, data = chickwts, mean)
+
+# feed   weight
+# 1    casein 323.5833
+# 2 horsebean 160.2000
+# 3   linseed 218.7500
+# 4  meatmeal 276.9091
+# 5   soybean 246.4286
+# 6 sunflower 328.9167
+
+aggregate(breaks ~ wool + tension, data = warpbreaks, mean)
+aggregate(cbind(Ozone, Temp) ~ Month, data = airquality, mean)
+
+aggregate(. ~ Species, data = iris, mean)
+aggregate(len ~ ., data = ToothGrowth, mean)
+
+## Often followed by xtabs():
+ag <- aggregate(len ~ ., data = ToothGrowth, mean)
+
+#> aggregate(len ~ ., data = ToothGrowth, mean)
+# supp dose   len
+# 1   OJ  0.5 13.23
+# 2   VC  0.5  7.98
+# 3   OJ  1.0 22.70
+# 4   VC  1.0 16.77
+# 5   OJ  2.0 26.06
+# 6   VC  2.0 26.14
+xtabs(len ~ ., data = ag)
+# > xtabs(len ~ ., data = ag)
+# dose
+# supp   0.5     1     2
+# OJ 13.23 22.70 26.06
+# VC  7.98 16.77 26.14
+
+aggregate(presidents, nfrequency = 1, FUN = mean) # Time Series:
 
 #####apply() 
 ########################################
@@ -84,6 +132,7 @@ Mylist <- list(a,b,c)
 lapply(Mylist,"[", 1, ) # extract first row in each list element
 lapply(Mylist,mean, 1, ) # mean of first row in each list element
 lapply(Mylist,"[", , 1) # extract first col in each list element
+
 # > lapply(Mylist,"[", 1, )
 # [[1]]
 # [1] 38  6 13
@@ -104,5 +153,13 @@ iris_num <- iris[, sapply(iris, is.numeric)]
 # sapply(iris_num, mean, na.rm = T, simplify = F) = lapply(iris_num, mean, na.rm = T)
 # vapply:  a pre-specified type of return value
 
+##### mapply() 
+########################################
+mapply(FUN, ..., MoreArgs = NULL, SIMPLIFY = TRUE, USE.NAMES = TRUE)
 
-
+noise <- function(n, mean, sd){
+  rnorm(n, mean, sd)
+}
+mapply(noise, 1:5, 1:5, 2)
+# Which is same with the followings:
+#list(noise(1,1,2), noise(2,2,2), noise(3,3,2), noise(4,4,2), noise(5,5,2))
