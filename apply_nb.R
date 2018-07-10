@@ -36,6 +36,9 @@ fby2 <- factor(by2, exclude = "")
 
 aggregate(x = testDF, by = list(fby1, fby2), FUN = "mean")
 
+aggregate(x = mtcars, by = list(am=factor(mtcars$am), cyl=factor(mtcars$cyl)), FUN = "mean")
+
+
 # > chickwts
 # weight      feed
 # 1     179 horsebean
