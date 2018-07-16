@@ -92,3 +92,13 @@ download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fdata%2Fss06hid.cs
 url <- "http://www.stats.ox.ac.uk/pub/datasets/csb/ch11b.dat"
 download.file(url, destfile = "ch11b.csv", method = "curl")
 url.data <- read.table('ch11b.csv', sep="")
+
+
+## Data export 
+####################################
+
+save("participant_CT", file="participant_CT.RData") # the objects to be saved "participant_CT"
+write.csv(nlst_cflc,'nlst_cflc.csv', na = "NA" )
+
+
+

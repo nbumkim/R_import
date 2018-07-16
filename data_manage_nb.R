@@ -1,3 +1,38 @@
+### Create list of lists
+# http://bims.fun/r-lists.html#converting_lists; list data manipulation
+mylist <- list(lamda=c(),result=c())
+# > mylist
+# $`lamda`
+# NULL
+# 
+# $result
+# NULL
+mylists <- rep(list(mylist), 5)
+
+### Create data.frame
+Result <- data.frame(obs=integer(),
+                     Accuracy=double(), 
+                     Sensitivity=double(),
+                     Specificity=double())
+
+df = data.frame(matrix(vector(), 0, 3,
+                       dimnames=list(c(), c("Date", "File", "User"))),
+                stringsAsFactors=F)
+
+### Create sequence of numbers
+seq(0.1, 20, by=0.1)
+
+## Eliminating incomplete case
+###########################
+mydata <- mydata[complete.cases(mydata),] 
+
+## Eliminating blank
+###########################
+mydata <- apply(mydata, 2, function(x) gsub(" ", "", x, fixed = TRUE))
+
+## Assigning blank with "NA"
+###########################
+mydata <- apply(mydata, 2, function(x) gsub("^$|^ $", NA, x)) # Blank <- NA
 
 #> str(prob)
 #Factor w/ 2 levels "0","1": 2 1 1 2 1 1 2 1 2 2 ...
@@ -74,7 +109,7 @@ T0_pos_n = subset(p_T0_pos, (p_T0_pos$pid %in% T0_nodules$pid))
 mtcars_subset_0 <- subset(mtcars, (am == 1 & cyl == c(4, 6)), 
                           select = c( mpg, cyl, am )) #subset(x, subset, select, drop = FALSE, ...)
 
-subset(airquality, Temp > 80, select = c(Ozone, Temp))
+subset(airquality, Temp > 80, select = c(Ozone, Temp)) # careful NOT "column name"
 subset(airquality, Day == 1, select = -Temp)
 subset(airquality, select = Ozone:Wind)
 
@@ -121,6 +156,10 @@ which(mymatrix %% 2 == 0, arr.ind=TRUE)
 
 nlst_ct <- participant[which(participant$rndgroup == '1'), ]
 
+## drop column with the colume name
+###########################
+drop <- c("x","z")
+df = mydata[,!(names(mydata) %in% drop)]
 
 ## Renames the colume name
 ###########################
