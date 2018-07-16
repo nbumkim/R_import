@@ -1,3 +1,18 @@
+
+
+# > head(ALTI_poster)
+# X4000Hz_before X250Hz_after X500Hz_after Tinnitus Dizziness ECoG_before
+# 1             15           25           15      Yes       Yes        0.31
+# 2             10           10           10      Yes        No        0.44
+# 3             25           25           15      Yes        No        0.17
+# 4             20           15           10      Yes        No        0.35
+# 5             20           25           15      Yes        No        0.40
+# 6             10           15           15       No       Yes        0.33       15
+##
+# ALTI[,2][ALTI[,2]=="M"] <- "m"
+# ALTI[,"Tinnitus"][ALTI[,"Tinnitus"]=="o"|ALTI[,"Tinnitus"]=="O" ] <- "Yes" 
+# ALTI <- apply(ALTI, 2, function(x) gsub("^$|^ $", NA, x))                    ALTI[,"Tinnitus"]=="O" ] <- "Yes" 
+
 ### Create list of lists
 # http://bims.fun/r-lists.html#converting_lists; list data manipulation
 mylist <- list(lamda=c(),result=c())
@@ -18,6 +33,10 @@ Result <- data.frame(obs=integer(),
 df = data.frame(matrix(vector(), 0, 3,
                        dimnames=list(c(), c("Date", "File", "User"))),
                 stringsAsFactors=F)
+
+## column selection
+features <- mydata[,!(names(mydata) %in% "Recur_yes")] # Input variables
+target <- mydata[,(names(mydata) %in% "Recur_yes")] # Target to be classified
 
 ### Create sequence of numbers
 seq(0.1, 20, by=0.1)
