@@ -1,4 +1,13 @@
-
+## Changing the order of levels of a factor
+# Create a factor with the wrong order of levels
+sizes <- factor(c("small", "large", "large", "small", "medium"))
+sizes
+#> [1] small  large  large  small  medium
+#> Levels: large medium small
+sizes <- factor(sizes, levels = c("small", "medium", "large"))
+sizes
+#> [1] small  large  large  small  medium
+#> Levels: small medium large
 
 # > head(ALTI_poster)
 # X4000Hz_before X250Hz_after X500Hz_after Tinnitus Dizziness ECoG_before
