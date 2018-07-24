@@ -1,0 +1,197 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r, graphical parameters}
+# adding labels
+# plot (x, y, xlab ="", ylab="", main = "", 
+#       sub = "", xlim = c(a,b), ylim = c(a,b))
+
+Speed <- cars$speed
+Distance <- cars$dist
+plot(Speed, Distance, panel.first  = grid(8, 8),
+     main = "Speed vs Dist",
+     col = "blue", 
+     col.main = "red",
+     pch = 15, 
+     lty = 2,
+     cex = 1,
+     font = 4, # 
+     fg = "black"
+     )
+
+## :: ==> access variables in a namespace
+# add points in the previous plot
+points(Speed, Distance,
+     panel.first = lines(stats::lowess(Speed, Distance),
+                         col = "blue",
+                         lty = "dashed"),
+     col = "red",
+     pch = 0,
+     cex = 1
+     )
+
+
+### col   default plotting color
+# col.axis  axis annotation
+# col.lab   x,y labels
+# col.main  title
+# col.sub   subtitle
+# fg        foreground
+# bg        background
+# xaxt='n'  remove x 
+
+### pch     specify symbols
+# The full set of S symbols is available with pch = 0:18, 0:18: S-compatible vector symbols.
+# 19:25: further R vector symbols
+
+### working with lines
+# lwd       line width
+# lty       line type 
+# lty: 0=blank, 1=solid (default), 2=dashed, 3=dotted, 4=dotdash, 5=longdash, 6=twodash
+
+### font =(font.axis) 1 = plain, 2  =bold, 3 =italic, 4 = bold italic etc.
+# font.axis
+# font.lab
+# font.main
+# font.sub
+
+### cex     text amd symbols scaled relative to the dedault = 1
+            # 1.5 is 50% large, 0.5 is 50% smaller, etc. 
+# cex.axis
+# cex.lab
+# cex.main
+# cex.sub
+
+### par Several parameters can only be set by a call to par()    
+# mfrow     fill matrix by row
+# mfcol
+# mar       c(bottom, left, top, right)
+# tck       appropriate values between 0-1
+# oma       set size of the outer margins in the lines of text
+# omd
+# pty
+# mgp
+
+
+# A Silly Axis Example
+
+# specify the data 
+# x <- c(1:10); y <- x; z <- 10/x
+
+# create extra margin room on the right for an axis 
+# par(mar=c(5, 4, 4, 8) + 0.1)
+
+# plot x vs. y 
+#plot(x, y,type="b", pch=21, col="red", 
+#   yaxt="n", lty=3, xlab="", ylab="")
+
+# add x vs. 1/x 
+#lines(x, z, type="b", pch=22, col="blue", lty=2)
+
+# draw an axis on the left 
+#axis(2, at=x,labels=x, col.axis="red", las=2)
+
+# draw an axis on the right, with smaller text and ticks 
+#axis(4, at=z,labels=round(z,digits=2),
+#  col.axis="blue", las=2, cex.axis=0.7, tck=-.01)
+
+# add a title for the right axis 
+#mtext("y=1/x", side=4, line=3, cex.lab=1,las=2, col="blue")
+
+# add a main title and bottom and left axis labels 
+#title("An Example of Creative Axes", xlab="X values",
+#   ylab="Y=X")
+```
+
+
+
+
+
+```{r, RGB}
+# rgb(red, green, blue, names = NULL)
+# colors()  Gives list of color names
+# barplot(x, col = "blanchedalmond")
+# barplot(x, col=colors()[102])   Darkseagreen
+color_sample <-rep(10, 20)
+barplot(color_sample, col = colors()[1:20])
+# barplot(color_sample, col = "red") 
+# same with barplot(color_sample, col = rgb(1, .0, .0)) # 0~1
+
+```
+
+```{r, working with palette}
+color_sample <-rep(10, 20)
+palette()
+barplot(color_sample, col=1:6)
+barplot(color_samle, col=rainbow(6))
+barplot(color_samle, col=heat.colors(6))
+
+```
+```{r, RColorBrewer}
+library(RColorBrewer)
+display.brewer.all()
+display.brewer.pal(8, "Dark2")
+
+pie(rep(1,n), col=heat.colors(n, alpha = 0.5))
+display.brewer.all()
+
+# rainbowcols <- rainbow(6,s = 0.5)
+# hist(discoveries,col = rainbowcols)
+
+hist(discoveries, col=brewer.pal(6, "Dark2"))
+```
+
+```{r, Hue-Saturation-Value(hsv) color space}
+# 
+col2rgb(colors()[111])
+rgb2hsv(col2rgb(colors()[111])) 
+hue <- seq(0.0, 1.0, by=1/40) 
+
+color_sample <-rep(10, 20)
+
+color_visual <- function(n=30){
+barplot(color_sample[1:n], col=colors()[1:n], names.arg=seq(1,length(colors()[1:n])), cex.names = 0.6, las = 2)
+}
+color_visual(50)
+
+colornames <- colors()[1:20]
+
+# s=1 when it is "far" from a shade of gray  
+# v=1 is the brightness of the color. 
+# alpha is transparent
+
+pie(rep(1,40), 
+    labels=formatC(hue, digits=3, format="f"), cex=0.75, 
+    col=hsv(hue, s=1.0, v=1.0, alpha=1), 
+    radius=1.0, 
+    main="HSV (S=1, V=1)" ) 
+
+
+MakeHSVRectangle <- function(saturation, value) 
+{
+  GoldHue <- 0.550 
+  color <- hsv(GoldHue, saturation, value) 
+  rect(100*saturation, 100*value, 100*saturation+4, 100*value+4, col=color) 
+} 
+
+plot(0:110,0:110, type="n",
+     xlab="Saturation[%]", ylab="Value[%]", 
+     main="Shades of Gold, H=0.140") 
+     outer(seq(0.0, 1.0, 0.05), seq(0.0, 1.0, 0.05), MakeHSVRectangle) 
+```
+```{r, palette}
+# help(package=colorspaces)
+# palette()
+# mycolors <- c("#A7A7A7", "dodgerblue", "firebrick", "forestgreen", "gold")
+# hist(x, col = mycolors)
+
+n=12
+pie(rep(1,n), col=FALSE)
+pie(rep(1,n), col=rainbow(n,  s = 1, v = 1, start = 0, 
+                          end = max(1, n - 1)/n, alpha = 0.5))
+
+```
+
+
