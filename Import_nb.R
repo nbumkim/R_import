@@ -16,7 +16,7 @@ path <- file.path("~", "datasets", "states.csv") # path
 
 mydata <- read.csv("mydata.csv", header = TRUE, stringsAsFactors = FALSE) # read the csv data
 mydata <- read.csv(path, header = TRUE, stringsAsFactors = FALSE) # read the csv data
-
+mydata <- read.csv(file.choose(), header = TRUE, stringsAsFactors = T)
 # mydata.csv; A tab-delimited text file
 #Index var1 var2
 #1   6   a
